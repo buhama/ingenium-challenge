@@ -4,6 +4,7 @@ export interface User {
   account_created: number;
   class_id?: string;
   role: UserRole;
+  tasks?: { taskId: string; amount: number; goal: number }[];
 }
 
 export enum UserRole {
