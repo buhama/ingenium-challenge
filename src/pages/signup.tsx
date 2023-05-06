@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { supabase } from "../../supabaseClient";
 import { Input, useToast, Button, Divider } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { signUp } from "../helpers/auth";
 
 const SignUp = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -15,15 +16,7 @@ const SignUp = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-
-      if (error) {
-        throw new Error(error.message);
-      }
-
+      await signUp(email, password, name);
       router.push("/onboarding");
 
       toast({
@@ -52,6 +45,12 @@ const SignUp = () => {
       className="flex flex-col gap-y-2 w-full mx-auto max-w-xs justify-center h-screen"
     >
       <h2 className="font-bold text-xl">Sign up</h2>
+      <Input
+        type="text"
+        placeholder="name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
       <Input
         type="email"
         placeholder="email"
