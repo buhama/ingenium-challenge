@@ -14,7 +14,8 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
-import { UserTask } from "../models/User";
+import { User, UserTask } from "../models/User";
+import { AddIcon } from "@chakra-ui/icons";
 
 const YourPage = () => {
   const { user, updateUser, setUser } = useUserStore();
@@ -44,6 +45,10 @@ const YourPage = () => {
       }
 
       const currentTasks = user?.tasks || [];
+
+      if (currentTasks.find((task) => task.taskId === selectedTaskId)) {
+        throw new Error("Task already added");
+      }
 
       const newTask: UserTask = {
         taskId: selectedTaskId,
@@ -90,6 +95,35 @@ const YourPage = () => {
     onClose();
   };
 
+  const increaseTask = async (taskId: string) => {
+    try {
+      if (!user) {
+        throw new Error("No user found");
+      }
+
+      const currentTasks = user?.tasks || [];
+      const newTasks = currentTasks.map((task) => {
+        if (task.taskId === taskId) {
+          return {
+            ...task,
+            amount: task.amount + 1,
+          };
+        }
+        return task;
+      });
+
+      const newUser: User = {
+        ...user,
+        tasks: newTasks,
+      };
+
+      await updateUser(newUser);
+      setUser({ ...newUser });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <p> Hey {user?.name}</p>
@@ -116,6 +150,10 @@ const YourPage = () => {
           <p>{classroom?.tasks?.find((t) => t.id === task.taskId)?.label}</p>
           <p>{task.amount}</p>
           <p>{task.goal}</p>
+          <AddIcon
+            className="cursor-pointer"
+            onClick={() => increaseTask(task.taskId)}
+          />
         </div>
       ))}
       <Modal isOpen={isOpen} onClose={closeModal} isCentered>
