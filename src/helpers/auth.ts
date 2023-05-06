@@ -1,12 +1,13 @@
 import { supabase } from "../../supabaseClient";
-import { User } from "../models/User";
+import { User, UserRole } from "../models/User";
 import { getTodaysDate } from "./date";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 
 export const signUp = async (
   email: string,
   password: string,
-  name: string
+  name: string,
+  role: UserRole
 ): Promise<SupabaseUser> => {
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -31,7 +32,7 @@ export const signUp = async (
     id: data?.user?.id || "",
     name,
     account_created: getTodaysDate(),
-    role: "student",
+    role,
   };
 
   const { error: insertError } = await supabase.from("users").insert(newUser);

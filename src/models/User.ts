@@ -3,5 +3,11 @@ export interface User {
   name: string;
   account_created: number;
   class_id?: string;
-  role: "student" | "teacher";
+  role: UserRole;
+}
+
+export enum UserRole {
+  ADMIN = "admin",
+  TEACHER = "teacher",
+  STUDENT = "student",
 }

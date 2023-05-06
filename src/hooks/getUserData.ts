@@ -30,7 +30,7 @@ export const useGetUserData = (userId: string | undefined) => {
     if (userId) {
       void fetchUser(userId);
       const organizerListener = supabase
-        .channel("public:organizers")
+        .channel("public:users")
         .on(
           REALTIME_LISTEN_TYPES.POSTGRES_CHANGES,
           {
