@@ -10,6 +10,7 @@ import { Classroom } from "../models/Classroom";
 import { getTodaysDate } from "../helpers/date";
 import { useClassroomStore } from "../store/ClassroomStore";
 import { getRandomId } from "../helpers/string";
+import { findClassroom } from "../helpers/classroom";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -20,6 +21,7 @@ const SignUp = () => {
   const [classRoomName, setClassRoomName] = useState("");
   const [classroomId, setClassroomId] = useState("");
   const [classroom, setClassroom] = useState<Classroom | undefined>(undefined);
+  const [classroomSearchLoading, setClassroomSearchLoading] = useState(false);
 
   const { signUpUser } = useAuthUserStore();
   const { updateClassroom } = useClassroomStore();
@@ -33,7 +35,10 @@ const SignUp = () => {
       setLoading(true);
       if (!role) throw new Error("Please select a role");
 
-      const class_id = role === UserRole.STUDENT ? classroomId : getRandomId();
+      const class_id =
+        role === UserRole.STUDENT ? classroom?.id : getRandomId();
+
+      if (!class_id) throw new Error("Classroom not found");
 
       await signUpUser(email, password, name, role, class_id);
       if (role === UserRole.TEACHER) {
@@ -41,6 +46,7 @@ const SignUp = () => {
           id: class_id,
           name: classRoomName,
           created_at: getTodaysDate(),
+          simple_id: class_id.slice(0, 5),
         });
       }
 
@@ -66,13 +72,24 @@ const SignUp = () => {
     }
   };
 
-  const findClassroom = (id: string) => {
-    if (id) {
-      setClassroom({
-        id: "",
-        name: "",
-        created_at: getTodaysDate(),
+  const searchClassroom = async (id: string) => {
+    try {
+      setClassroomSearchLoading(true);
+      const classroom = await findClassroom(id);
+
+      if (!classroom) throw new Error("Classroom not found");
+
+      setClassroom(classroom);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: (error as Error).message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
       });
+    } finally {
+      setClassroomSearchLoading(false);
     }
   };
 
@@ -100,7 +117,8 @@ const SignUp = () => {
             <Button
               className="w-full"
               colorScheme={"green"}
-              onClick={() => findClassroom(classroomId)}
+              onClick={() => searchClassroom(classroomId)}
+              isLoading={classroomSearchLoading}
             >
               Find
             </Button>
@@ -123,6 +141,9 @@ const SignUp = () => {
                   value={classRoomName}
                   onChange={(e) => setClassRoomName(e.target.value)}
                 />
+              )}
+              {role === UserRole.STUDENT && classroom && (
+                <p className="font-bold text-lg">Joining: {classroom.name}</p>
               )}
               <Input
                 type="text"

@@ -8,7 +8,8 @@ const OnboardingPage = () => {
   const { classroom } = useClassroomStore();
   return (
     <div>
-      Hello {user?.name} you are part of classroom {classroom?.name}
+      Hello {user?.name} you are part of classroom {classroom?.name} and your
+      classroom id is {classroom?.simple_id}
     </div>
   );
 };
