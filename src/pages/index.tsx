@@ -13,7 +13,6 @@ export default function Home() {
   const [password, setPassword] = useState("");
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(email, password);
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -21,10 +20,22 @@ export default function Home() {
 
   return (
     <>
-    <form onSubmit={submit}>
-    <Input type="email" placeholder="email" value={email} onChange={(e)=>setEmail(e.target.value)}/>
-    <Input type="password" placeholder="password" value={password}  onChange={(e)=>setPassword(e.target.value)} />
-      <Button colorScheme="blue" type="submit">Sign Up</Button>
+      <form onSubmit={submit}>
+        <Input
+          type="email"
+          placeholder="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Input
+          type="password"
+          placeholder="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Button colorScheme="blue" type="submit">
+          Sign Up
+        </Button>
       </form>
     </>
   );
