@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { Input, useToast, Button, Divider } from "@chakra-ui/react";
 import { useRouter } from "next/router";
-import { signUp } from "../helpers/auth";
+import { useAuthUserStore } from "../store/AuthUserStore";
 
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { signUpUser } = useAuthUserStore();
 
   const toast = useToast();
   const router = useRouter();
@@ -16,7 +18,7 @@ const SignUp = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      await signUp(email, password, name);
+      await signUpUser(email, password, name);
       router.push("/onboarding");
 
       toast({

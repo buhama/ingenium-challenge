@@ -1,8 +1,10 @@
 import React, { ReactElement } from "react";
 import Layout from "../components/Layout";
+import { useUserStore } from "../store/UserStore";
 
 const OnboardingPage = () => {
-  return <div>OnboardingPage</div>;
+  const { user } = useUserStore();
+  return <div>Hello {user?.name}</div>;
 };
 
 export default OnboardingPage;

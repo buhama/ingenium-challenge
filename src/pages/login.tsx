@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { supabase } from "../../supabaseClient";
 import { Input, useToast, Button, Divider } from "@chakra-ui/react";
 import { useRouter } from "next/router";
+import { useAuthUserStore } from "../store/AuthUserStore";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { loginUser } = useAuthUserStore();
 
   const toast = useToast();
   const router = useRouter();
@@ -15,17 +17,8 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       setLoading(true);
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        throw new Error(error.message);
-      }
-
+      await loginUser(email, password);
       router.push("/onboarding");
-
       toast({
         title: "Success",
         description: "You're in!!",

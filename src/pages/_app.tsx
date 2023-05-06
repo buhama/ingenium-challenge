@@ -5,6 +5,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { ReactElement, ReactNode, useEffect } from "react";
 import theme from "../../theme";
+import RouteGuard from "../components/RouteGuard";
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -19,7 +20,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <ChakraProvider theme={theme}>
-      {getLayout(<Component {...pageProps} />)}
+      {getLayout(
+        <RouteGuard>
+          <Component {...pageProps} />
+        </RouteGuard>
+      )}
     </ChakraProvider>
   );
 }
