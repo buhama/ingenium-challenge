@@ -1,7 +1,6 @@
-import React, { ReactElement, useState } from "react";
+import React, { useState } from "react";
 import { supabase } from "../../supabaseClient";
-import { Input, useToast, Button } from "@chakra-ui/react";
-import Layout from "../components/Layout";
+import { Input, useToast, Button, Divider } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 
 const SignUp = () => {
@@ -66,9 +65,12 @@ const SignUp = () => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <Button type="submit" isLoading={loading}>
+      <Button colorScheme="green" type="submit" isLoading={loading}>
         Sign Up
       </Button>
+      <Divider />
+      <p className="mt-3">Already have an account?</p>
+      <Button onClick={() => router.push("/login")}>Login</Button>
     </form>
   );
 };

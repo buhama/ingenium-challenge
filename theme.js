@@ -25,7 +25,7 @@ const themes = {
     },
     Divider: {
       baseStyle: {
-        borderColor: "yellow.500",
+        borderColor: "green.500",
       },
     },
     Popover: {
