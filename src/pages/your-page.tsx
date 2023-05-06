@@ -1,16 +1,36 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useState } from "react";
 import Layout from "../components/Layout";
 import { useUserStore } from "../store/UserStore";
 import { useClassroomStore } from "../store/ClassroomStore";
-import { Button } from "@chakra-ui/react";
+import {
+  Button,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import { UserTask } from "../models/User";
 
 const YourPage = () => {
   const { user, updateUser, setUser } = useUserStore();
   const { classroom } = useClassroomStore();
 
-  const addTaskToUser = async (taskId: string) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [goal, setGoal] = useState(0);
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const toast = useToast();
+
+  const addTaskToUser = async () => {
     try {
+      setLoading(true);
       if (!user) {
         throw new Error("No user found");
       }
@@ -19,11 +39,15 @@ const YourPage = () => {
         throw new Error("No classroom found");
       }
 
+      if (!selectedTaskId) {
+        throw new Error("No task selected");
+      }
+
       const currentTasks = user?.tasks || [];
 
       const newTask: UserTask = {
-        taskId: taskId,
-        goal: 10,
+        taskId: selectedTaskId,
+        goal: goal,
         amount: 0,
       };
 
@@ -36,10 +60,34 @@ const YourPage = () => {
 
       await updateUser(newUser);
       setUser({ ...newUser });
+
+      toast({
+        title: "Task added",
+        description: "Task added successfully",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      closeModal();
     } catch (error) {
       console.log(error);
+      toast({
+        title: "Error",
+        description: (error as Error).message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
     }
     console.log("add task to user");
+  };
+
+  const closeModal = () => {
+    setSelectedTaskId(null);
+    setGoal(0);
+    onClose();
   };
 
   return (
@@ -51,7 +99,13 @@ const YourPage = () => {
       {classroom?.tasks?.map((task) => (
         <div key={task.id} className="flex items-center gap-x-2">
           <p>{task.label}</p>
-          <Button size="small" onClick={() => addTaskToUser(task.id)}>
+          <Button
+            size="small"
+            onClick={() => {
+              setSelectedTaskId(task.id);
+              onOpen();
+            }}
+          >
             Add To Your Tasks
           </Button>
         </div>
@@ -59,11 +113,38 @@ const YourPage = () => {
       <p className="font-bold">Your own tasks</p>
       {user?.tasks?.map((task) => (
         <div key={task.taskId} className="flex items-center gap-x-2">
-          <p>{task.taskId}</p>
+          <p>{classroom?.tasks?.find((t) => t.id === task.taskId)?.label}</p>
           <p>{task.amount}</p>
           <p>{task.goal}</p>
         </div>
       ))}
+      <Modal isOpen={isOpen} onClose={closeModal} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Add Task</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <p className="font-bold">What is your weekly goal?</p>
+            <Input
+              title="What is your weekly goal"
+              placeholder="What is your goal"
+              value={goal}
+              type="number"
+              onChange={(e) => setGoal(parseInt(e.target.value))}
+            ></Input>
+            <div className="flex justify-between w-full mt-4">
+              <Button>Cancel</Button>
+              <Button
+                colorScheme="green"
+                onClick={addTaskToUser}
+                isLoading={loading}
+              >
+                Add
+              </Button>
+            </div>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };
