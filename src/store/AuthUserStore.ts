@@ -14,7 +14,8 @@ interface AuthUserState {
     email: string,
     password: string,
     name: string,
-    role: UserRole
+    role: UserRole,
+    class_id: string
   ) => Promise<void>;
   logoutUser: () => Promise<void>;
 }
@@ -35,10 +36,11 @@ export const useAuthUserStore = create<AuthUserState>()(
       email: string,
       password: string,
       name: string,
-      role: UserRole
+      role: UserRole,
+      class_id: string
     ) => {
       try {
-        const newUser = await signUp(email, password, name, role);
+        const newUser = await signUp(email, password, name, role, class_id);
         if (newUser) set(() => ({ user: newUser }));
       } catch (error) {
         console.error(error);

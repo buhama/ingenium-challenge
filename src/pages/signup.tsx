@@ -33,10 +33,12 @@ const SignUp = () => {
       setLoading(true);
       if (!role) throw new Error("Please select a role");
 
-      await signUpUser(email, password, name, role);
+      const class_id = role === UserRole.STUDENT ? classroomId : getRandomId();
+
+      await signUpUser(email, password, name, role, class_id);
       if (role === UserRole.TEACHER) {
         await updateClassroom({
-          id: getRandomId(),
+          id: class_id,
           name: classRoomName,
           created_at: getTodaysDate(),
         });

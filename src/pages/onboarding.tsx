@@ -1,10 +1,16 @@
 import React, { ReactElement } from "react";
 import Layout from "../components/Layout";
 import { useUserStore } from "../store/UserStore";
+import { useClassroomStore } from "../store/ClassroomStore";
 
 const OnboardingPage = () => {
   const { user } = useUserStore();
-  return <div>Hello {user?.name}</div>;
+  const { classroom } = useClassroomStore();
+  return (
+    <div>
+      Hello {user?.name} you are part of classroom {classroom?.name}
+    </div>
+  );
 };
 
 export default OnboardingPage;

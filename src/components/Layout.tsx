@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useAuthUserStore } from "../store/AuthUserStore";
 import { useGetUserData } from "../hooks/getUserData";
+import { useGetClassroomData } from "../hooks/getClassroomData";
+import { useUserStore } from "../store/UserStore";
 
 export interface Props {
   children: React.ReactNode;
@@ -12,11 +14,13 @@ export interface Props {
 const Layout: React.FC<Props> = ({ children, noNav }) => {
   const [logoutLoading, setLogoutLoading] = useState(false);
   const { logoutUser } = useAuthUserStore();
-  const { user } = useAuthUserStore();
+  const { user: authUser } = useAuthUserStore();
+  const { user } = useUserStore();
 
   const toast = useToast();
   const router = useRouter();
-  useGetUserData(user?.id);
+  useGetUserData(authUser?.id);
+  useGetClassroomData(user?.class_id);
 
   const logOut = async () => {
     try {

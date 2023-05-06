@@ -7,7 +7,8 @@ export const signUp = async (
   email: string,
   password: string,
   name: string,
-  role: UserRole
+  role: UserRole,
+  class_id: string
 ): Promise<SupabaseUser> => {
   const { data, error } = await supabase.auth.signUp({
     email,
@@ -33,6 +34,7 @@ export const signUp = async (
     name,
     account_created: getTodaysDate(),
     role,
+    class_id,
   };
 
   const { error: insertError } = await supabase.from("users").insert(newUser);
