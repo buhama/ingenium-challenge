@@ -163,9 +163,9 @@ const YourPage = () => {
             </div>
             <div className="bg-slate-200 w-full min-h-fit flex items-center z-10 pl-10 -ml-7 rounded-xl border-2 border-black py-2">
               <p className="font-bold text-lg">
-                Now that you've learned about the impact of climate change on
-                animals, here's what you can do to help! Click on the things you
-                have done today.
+                Keep up with your positive climate habits and my home will
+                continue to flourish. You can add more habits to track based on
+                what your other classmates are working on!
               </p>
             </div>
           </div>
@@ -177,6 +177,13 @@ const YourPage = () => {
           <AnimatePresence initial={false}>
             {tasksView === "user" && (
               <FadeInOut>
+                {user?.tasks?.length === 0 ||
+                  (!user?.tasks && (
+                    <p className="text-center mt-5 italic -mb-5">
+                      You are not tracking any habits right now. Click below to
+                      start tracking!
+                    </p>
+                  ))}
                 <div className="grid grid-cols-4 gap-4 w-full mt-10">
                   {user?.tasks?.map((task) => (
                     <div
@@ -245,7 +252,7 @@ const YourPage = () => {
           >
             {tasksView === "user"
               ? "Add Other Habits That Your Classmates Are Working On"
-              : "Add Your Own Habits"}
+              : "Track Your Own Habits"}
           </Button>
         </div>
       </div>
