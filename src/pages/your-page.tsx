@@ -318,7 +318,7 @@ const YourPage = () => {
               <FadeInOut>
                 <div>
                   <p className="font-bold text-center mt-4">
-                    Your Classroom Tasks:{" "}
+                    Your Classroom Habits:{" "}
                   </p>
                   <div className="grid md:grid-cols-4 grid-cols-3 gap-4 w-full mt-10">
                     {classroom?.tasks?.map((task) => (
