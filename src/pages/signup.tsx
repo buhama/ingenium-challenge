@@ -12,6 +12,8 @@ import { useClassroomStore } from "../store/ClassroomStore";
 import { getRandomId } from "../helpers/string";
 import { findClassroom } from "../helpers/classroom";
 import LoginBackSplash from "../components/LoginBackSplash";
+import logo from "@images/logo.png";
+import Image from "next/image";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -98,7 +100,14 @@ const SignUp = () => {
   return (
     <div>
       <LoginBackSplash />
-      <div className="h-screen mx-auto max-w-md w-full flex flex-col justify-center">
+      <div className="h-screen mx-auto px-4 max-w-md w-full flex flex-col justify-center">
+        <Image
+          src={logo}
+          alt="logo"
+          width={300}
+          height={100}
+          className="self-center mb-10"
+        />
         <div className="bg-white h-fit p-4 rounded-xl shadow-xl">
           <p className="font-bold">Are you a teacher or a learner?</p>
           <ToggleRadio
@@ -174,13 +183,15 @@ const SignUp = () => {
                   <Button colorScheme="green" type="submit" isLoading={loading}>
                     Sign Up
                   </Button>
-                  <Divider className="mt-3" />
-                  <p className="mt-3">Already have an account?</p>
-                  <Button onClick={() => router.push("/login")}>Login</Button>
                 </form>
               </FadeInOut>
             )}
           </AnimatePresence>
+          <Divider className="mt-3" />
+          <p className="mt-3">Already have an account?</p>
+          <Button className="w-full" onClick={() => router.push("/login")}>
+            Login
+          </Button>
         </div>
       </div>
     </div>

@@ -3,6 +3,8 @@ import { Input, useToast, Button, Divider } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useAuthUserStore } from "../store/AuthUserStore";
 import LoginBackSplash from "../components/LoginBackSplash";
+import Image from "next/image";
+import logo from "@images/logo.png";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -44,7 +46,14 @@ const LoginPage = () => {
     <>
       {" "}
       <LoginBackSplash />
-      <div className="h-screen mx-auto max-w-md w-full flex flex-col justify-center">
+      <div className="h-screen px-4 mx-auto max-w-md w-full flex flex-col justify-center">
+        <Image
+          src={logo}
+          alt="logo"
+          width={300}
+          height={100}
+          className="self-center mb-10"
+        />
         <div className="bg-white h-fit p-4 rounded-xl shadow-xl">
           <form
             onSubmit={submit}
