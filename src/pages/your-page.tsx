@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import Layout from "../components/Layout";
 import { useUserStore } from "../store/UserStore";
 import { useClassroomStore } from "../store/ClassroomStore";
@@ -12,6 +12,14 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
+  Progress,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
@@ -32,6 +40,7 @@ import {
   getTreeOpacityStyle,
   getTreeRightClass,
 } from "../helpers/tree";
+import { getAllUsers } from "../helpers/classroom";
 
 const YourPage = () => {
   const { user, updateUser, setUser } = useUserStore();
@@ -45,8 +54,24 @@ const YourPage = () => {
   const [increaseTaskLoading, setIncreaseTaskLoading] = useState(false);
 
   const [tasksView, setTasksView] = useState<"user" | "classroom">("user");
+  const [allUsers, setAllUsers] = useState<User[]>([]);
 
   const toast = useToast();
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const newUsers = await getAllUsers();
+        if (newUsers) {
+          setAllUsers(newUsers);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    void fetchUsers();
+  }, []);
 
   const addTaskToUser = async () => {
     try {
@@ -196,18 +221,42 @@ const YourPage = () => {
   return (
     <div>
       {classroom?.trees?.map((t) => (
-        <Image
-          key={t.id}
-          className={`absolute`}
-          style={{
-            bottom: t.bottomClass,
-            right: t.rightClass,
-            opacity: t.opacityClass,
-          }}
-          width={100}
-          src={tree}
-          alt="Tree"
-        />
+        <Popover key={t.id}>
+          <PopoverTrigger>
+            <Image
+              key={t.id}
+              className={`absolute cursor-pointer hover:scale-105 transition-all`}
+              style={{
+                bottom: t.bottomClass,
+                right: t.rightClass,
+                opacity: t.opacityClass,
+              }}
+              width={100}
+              src={tree}
+              alt="Tree"
+            />
+          </PopoverTrigger>
+          <PopoverContent>
+            <PopoverArrow />
+            <PopoverCloseButton />
+            <PopoverBody>
+              <div className="p-2">
+                <span className="font-bold">
+                  {allUsers?.find((u) => u.id === t.studentId)?.name}'s
+                </span>{" "}
+                Tree For Task{" "}
+                <span className="font-bold">
+                  {
+                    classroom?.tasks?.find((task) => task.id === t.taskId)
+                      ?.label
+                  }
+                </span>
+                <p className="mt-2">Progress:</p>
+                <Progress hasStripe value={parseFloat(t.opacityClass) * 100} />
+              </div>
+            </PopoverBody>
+          </PopoverContent>
+        </Popover>
       ))}
       {/* <Image
         className="absolute"
