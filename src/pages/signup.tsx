@@ -99,7 +99,7 @@ const SignUp = () => {
     <div>
       <LoginBackSplash />
       <div className="h-screen mx-auto max-w-md w-full flex flex-col justify-center">
-        <div className="bg-white h-fit p-4 rounded-xl bg-opacity-80">
+        <div className="bg-white h-fit p-4 rounded-xl shadow-xl">
           <p className="font-bold">Are you a teacher or a learner?</p>
           <ToggleRadio
             options={[

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Input, useToast, Button, Divider } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useAuthUserStore } from "../store/AuthUserStore";
+import LoginBackSplash from "../components/LoginBackSplash";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -40,31 +41,39 @@ const LoginPage = () => {
   };
 
   return (
-    <form
-      onSubmit={submit}
-      className="flex flex-col gap-y-2 w-full mx-auto max-w-xs justify-center h-screen"
-    >
-      <h2 className="font-bold text-xl">Login</h2>
-      <Input
-        type="email"
-        placeholder="email"
-        className="w-full"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <Input
-        type="password"
-        placeholder="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <Button colorScheme="green" type="submit" isLoading={loading}>
-        Log In
-      </Button>
-      <Divider />
-      <p className="mt-3">Dont have an account?</p>
-      <Button onClick={() => router.push("/signup")}>Sign Up</Button>
-    </form>
+    <>
+      {" "}
+      <LoginBackSplash />
+      <div className="h-screen mx-auto max-w-md w-full flex flex-col justify-center">
+        <div className="bg-white h-fit p-4 rounded-xl shadow-xl">
+          <form
+            onSubmit={submit}
+            className="flex flex-col gap-y-2 w-full justify-center"
+          >
+            <h2 className="font-bold text-xl">Login</h2>
+            <Input
+              type="email"
+              placeholder="email"
+              className="w-full"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Input
+              type="password"
+              placeholder="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Button colorScheme="green" type="submit" isLoading={loading}>
+              Log In
+            </Button>
+            <Divider />
+            <p className="mt-3">Dont have an account?</p>
+            <Button onClick={() => router.push("/signup")}>Sign Up</Button>
+          </form>
+        </div>
+      </div>
+    </>
   );
 };
 
