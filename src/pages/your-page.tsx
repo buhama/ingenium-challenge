@@ -187,7 +187,10 @@ const YourPage = () => {
                       }
                     >
                       <TaskIcons
-                        icon={IconType.SHOWER}
+                        icon={
+                          (classroom?.tasks?.find((t) => t.id === task.taskId)
+                            ?.icon as IconType) || IconType.SHOWER
+                        }
                         label={
                           classroom?.tasks?.find((t) => t.id === task.taskId)
                             ?.label || ""
@@ -221,7 +224,7 @@ const YourPage = () => {
                         }}
                       >
                         <TaskIcons
-                          icon={IconType.SHOWER}
+                          icon={(task.icon as IconType) || IconType.SHOWER}
                           label={task.label}
                           bgColor={"bg-white"}
                         />

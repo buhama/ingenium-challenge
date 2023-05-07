@@ -16,12 +16,16 @@ import {
 import { Task } from "../models/Tasks";
 import { getRandomId } from "../helpers/string";
 import Layout from "../components/Layout";
+import TaskIcons from "../components/assets/TaskIcons";
+import { IconType, Icons } from "../models/Icon";
+import Icon from "../components/assets/Icon";
 
 const ClassPages = () => {
   const { user } = useUserStore();
   const { classroom, updateClassroom, setClassroom } = useClassroomStore();
   const [taskLabel, setTaskLabel] = useState("");
   const [loading, setLoading] = useState(false);
+  const [icon, setIcon] = useState<IconType>(IconType.LEAF);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -39,6 +43,7 @@ const ClassPages = () => {
         id: getRandomId().slice(0, 8),
         label: taskLabel,
         class_id: classroom?.id,
+        icon,
       };
 
       const newTasks = [...currentTasks, newTask];
@@ -80,27 +85,70 @@ const ClassPages = () => {
 
   return (
     <div>
-      <p> Hey {user?.name}</p>
-      <p> Your classroom {classroom?.name}</p>
-      <p> Your classroom id {classroom?.simple_id}</p>
-      <p>Your classes tasks</p>
-      {classroom?.tasks?.map((task) => (
-        <div key={task.id}>
-          <p>{task.label}</p>
+      <div className="flex justify-end">
+        <div className="w-full max-w-4xl rounded-xl bg-white mr-10 mt-20 p-4">
+          <div className="flex items-center justify-between">
+            <p className="font-bold text-lg">Hey {user?.name}</p>
+            <p>Class Id: {classroom?.simple_id}</p>
+          </div>
+          <div>
+            <p className="font-bold">Your Classroom Tasks: </p>
+            <div className="grid grid-cols-4 gap-4 w-full mt-10">
+              {classroom?.tasks?.map((task) => (
+                <div
+                  className="flex w-full items-center justify-center"
+                  key={task.id}
+                  onClick={() => {
+                    onOpen();
+                  }}
+                >
+                  <TaskIcons
+                    icon={(task.icon as IconType) || IconType.SHOWER}
+                    label={task.label}
+                    bgColor={"bg-white"}
+                  />
+                </div>
+              ))}
+            </div>
+            <Button
+              className="w-full mt-4"
+              leftIcon={<Icon icon={IconType.PLUS} />}
+              onClick={onOpen}
+            >
+              Add Task For The Classroom
+            </Button>
+          </div>
         </div>
-      ))}
-      <Button onClick={onOpen}>Add Task</Button>
+      </div>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Add Task</ModalHeader>
+          <ModalHeader>Add Habit</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+            <p>Task description</p>
             <Input
-              placeholder="Task description"
+              placeholder="Eat vegan meals"
               value={taskLabel}
               onChange={(e) => setTaskLabel(e.target.value)}
             ></Input>
+            <p className="mt-4">Select Icon For Habit</p>
+            <div className="grid grid-cols-6 gap-4 mt-2">
+              {Object.keys(Icons).map((key) => (
+                <div
+                  key={key}
+                  className={` ${
+                    key === icon && "bg-green-200"
+                  } flex flex-col items-center cursor-pointer hover:bg-green-200 rounded-lg p-2 justify-center`}
+                  onClick={() => setIcon(key as IconType)}
+                >
+                  <Icon
+                    icon={key as IconType}
+                    className="cursor-pointer text-xl hover:scale-105 "
+                  />
+                </div>
+              ))}
+            </div>
             <div className="flex justify-between w-full mt-4">
               <Button>Cancel</Button>
               <Button colorScheme="green" onClick={addTask} isLoading={loading}>
