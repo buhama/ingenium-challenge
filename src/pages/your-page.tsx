@@ -23,6 +23,8 @@ import { faShower } from "@fortawesome/free-solid-svg-icons";
 import Icon from "../components/assets/Icon";
 import { IconType } from "../models/Icon";
 import TaskIcons from "../components/assets/TaskIcons";
+import { AnimatePresence } from "framer-motion";
+import FadeInOut from "../components/assets/FadeInOut";
 
 const YourPage = () => {
   const { user, updateUser, setUser } = useUserStore();
@@ -34,6 +36,8 @@ const YourPage = () => {
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [increaseTaskLoading, setIncreaseTaskLoading] = useState(false);
+
+  const [tasksView, setTasksView] = useState<"user" | "classroom">("user");
 
   const toast = useToast();
 
@@ -147,31 +151,76 @@ const YourPage = () => {
       <div className="flex justify-end">
         <div className="w-full max-w-4xl rounded-xl bg-white mr-10 mt-20 p-4">
           <p className="font-bold text-lg">Hey {user?.name}</p>
-          <div className="grid grid-cols-4 gap-4 w-full mt-10">
-            {user?.tasks?.map((task) => (
-              <div
-                className="flex w-full items-center justify-center"
-                key={task.taskId}
-                onClick={() =>
-                  !increaseTaskLoading && increaseTask(task.taskId)
-                }
-              >
-                <TaskIcons
-                  icon={IconType.SHOWER}
-                  label={
-                    classroom?.tasks?.find((t) => t.id === task.taskId)
-                      ?.label || ""
-                  }
-                  bgColor={"bg-white"}
-                  goal={task.goal}
-                  progress={task.amount}
-                  loading={
-                    increaseTaskLoading && selectedTaskId === task.taskId
-                  }
-                />
-              </div>
-            ))}
-          </div>
+          <AnimatePresence initial={false}>
+            {tasksView === "user" && (
+              <FadeInOut>
+                <div className="grid grid-cols-4 gap-4 w-full mt-10">
+                  {user?.tasks?.map((task) => (
+                    <div
+                      className="flex w-full items-center justify-center"
+                      key={task.taskId}
+                      onClick={() =>
+                        !increaseTaskLoading && increaseTask(task.taskId)
+                      }
+                    >
+                      <TaskIcons
+                        icon={IconType.SHOWER}
+                        label={
+                          classroom?.tasks?.find((t) => t.id === task.taskId)
+                            ?.label || ""
+                        }
+                        bgColor={"bg-white"}
+                        goal={task.goal}
+                        progress={task.amount}
+                        loading={
+                          increaseTaskLoading && selectedTaskId === task.taskId
+                        }
+                      />
+                    </div>
+                  ))}
+                </div>
+              </FadeInOut>
+            )}
+          </AnimatePresence>
+          <AnimatePresence initial={false}>
+            {tasksView === "classroom" && (
+              <FadeInOut>
+                <div>
+                  <p className="font-bold">Your Classroom Tasks: </p>
+                  <div className="grid grid-cols-4 gap-4 w-full mt-10">
+                    {classroom?.tasks?.map((task) => (
+                      <div
+                        className="flex w-full items-center justify-center"
+                        key={task.id}
+                        onClick={() => {
+                          setSelectedTaskId(task.id);
+                          onOpen();
+                        }}
+                      >
+                        <TaskIcons
+                          icon={IconType.SHOWER}
+                          label={task.label}
+                          bgColor={"bg-white"}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </FadeInOut>
+            )}
+          </AnimatePresence>
+          <Button
+            className="w-full mt-4"
+            colorScheme="green"
+            leftIcon={<Icon icon={IconType.PLUS} />}
+            onClick={() =>
+              setTasksView(tasksView === "user" ? "classroom" : "user")
+            }
+          >
+            {tasksView === "user"
+              ? "Add Other Habits That Your Classmates Are Working On"
+              : "Add Your Own Habits"}
+          </Button>
         </div>
       </div>
       <p> Hey {user?.name}</p>
