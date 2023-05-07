@@ -258,7 +258,7 @@ const YourPage = () => {
               <p className="font-bold text-lg">Borris</p>
             </div>
             <div className="bg-slate-200 w-full min-h-fit flex items-center z-10 pl-10 -ml-7 rounded-xl border-2 border-black py-2">
-              <p className="font-bold text-lg">
+              <p className="font-bold md:text-lg text-sm">
                 Keep up with your positive climate habits and my home will
                 continue to flourish. You can add more habits to track based on
                 what your other classmates are working on!
@@ -269,7 +269,7 @@ const YourPage = () => {
       </div>
       <div className="flex justify-end">
         <div
-          className="w-full max-w-4xl rounded-xl bg-white mr-10 mt-20 p-4 overflow-auto z-50"
+          className="w-full max-w-4xl rounded-xl bg-white xl:mr-10 mx-4 mt-20 p-4 overflow-auto z-50"
           style={{ maxHeight: "60vh" }}
         >
           <p className="font-bold text-lg">Hey {user?.name}</p>
@@ -282,7 +282,7 @@ const YourPage = () => {
                     start tracking!
                   </p>
                 )}
-                <div className="grid grid-cols-4 gap-4 w-full mt-10">
+                <div className="grid md:grid-cols-4 grid-cols-3 gap-4 w-full mt-10">
                   {user?.tasks?.map((task) => (
                     <div
                       className="flex w-full items-start justify-center"
@@ -317,8 +317,10 @@ const YourPage = () => {
             {tasksView === "classroom" && (
               <FadeInOut>
                 <div>
-                  <p className="font-bold">Your Classroom Tasks: </p>
-                  <div className="grid grid-cols-4 gap-4 w-full mt-10">
+                  <p className="font-bold text-center mt-4">
+                    Your Classroom Tasks:{" "}
+                  </p>
+                  <div className="grid md:grid-cols-4 grid-cols-3 gap-4 w-full mt-10">
                     {classroom?.tasks?.map((task) => (
                       <div
                         className="flex w-full items-start justify-center"
@@ -343,13 +345,14 @@ const YourPage = () => {
           <Button
             className="w-full mt-4"
             colorScheme="green"
+            size="sm"
             leftIcon={<Icon icon={IconType.PLUS} />}
             onClick={() =>
               setTasksView(tasksView === "user" ? "classroom" : "user")
             }
           >
             {tasksView === "user"
-              ? "Add Other Habits That Your Classmates Are Working On"
+              ? "Add Other Habits From Your Classroom"
               : "Track Your Own Habits"}
           </Button>
         </div>

@@ -71,11 +71,20 @@ const OnboardingPage = () => {
 
   return (
     <div>
-      <Image
-        className="absolute bottom-40 xl:left-40 hidden xl:block"
-        src={getBeaver()}
-        alt="Borris The Beaver"
-      />
+      {(step === Step.INTRO || step === Step.START) && (
+        <Image
+          className="absolute bottom-40 xl:left-40"
+          src={getBeaver()}
+          alt="Borris The Beaver"
+        />
+      )}
+      {step !== Step.INTRO && (
+        <Image
+          className="absolute bottom-40 xl:left-40 hidden md:block"
+          src={getBeaver()}
+          alt="Borris The Beaver"
+        />
+      )}
       <div className="w-full max-w-5xl absolute bottom-20 xl:left-60 px-10">
         <div className="flex items-start">
           <div className="rounded-full aspect-square border-2 border-black z-20">
@@ -113,10 +122,10 @@ const OnboardingPage = () => {
         </div>
       </div>
       {(step === Step.CHOOSE_TOPIC || step === Step.WATCH_VIDEO) && (
-        <div className="flex justify-end mr-20">
-          <div className="w-full max-w-4xl rounded-xl mr-20 mt-20 p-4">
+        <div className="flex justify-end md:mr-20 mx-10">
+          <div className="w-full max-w-4xl rounded-xl md:mr-20 mt-20 p-4 mx-auto">
             {step === Step.CHOOSE_TOPIC && (
-              <div className="grid grid-cols-2 gap-y-10">
+              <div className="grid grid-cols-2 gap-y-10 gap-x-4">
                 <div
                   className="flex justify-center items-center flex-col"
                   onClick={() => setStep(step + 1)}
