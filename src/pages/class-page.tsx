@@ -141,8 +141,12 @@ const ClassPages = () => {
       {classroom?.trees?.map((t) => (
         <Image
           key={t.id}
-          className={`absolute ${t.opacityClass}`}
-          style={{ bottom: t.bottomClass, right: t.rightClass, opacity: '0.5' }}
+          className={`absolute`}
+          style={{
+            bottom: t.bottomClass,
+            right: t.rightClass,
+            opacity: t.opacityClass,
+          }}
           width={100}
           src={tree}
           alt="Tree"

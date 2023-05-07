@@ -87,7 +87,7 @@ const YourPage = () => {
         id: getRandomId().slice(0, 5),
         studentId: user.id,
         taskId: selectedTaskId,
-        opacityClass: "opacity-10",
+        opacityClass: "0.1",
         rightClass: getTreeRightClass(),
         bottomClass: getTreeBottomClass(),
       };
@@ -198,7 +198,7 @@ const YourPage = () => {
       {classroom?.trees?.map((t) => (
         <Image
           key={t.id}
-          className={`absolute ${t.opacityClass}`}
+          className={`absolute`}
           style={{
             bottom: t.bottomClass,
             right: t.rightClass,
@@ -276,13 +276,12 @@ const YourPage = () => {
           <AnimatePresence initial={false}>
             {tasksView === "user" && (
               <FadeInOut>
-                {user?.tasks?.length === 0 ||
-                  (!user?.tasks && (
-                    <p className="text-center mt-5 italic -mb-5">
-                      You are not tracking any habits right now. Click below to
-                      start tracking!
-                    </p>
-                  ))}
+                {(user?.tasks?.length === 0 || !user?.tasks) && (
+                  <p className="text-center mt-5 italic -mb-5">
+                    You are not tracking any habits right now. Click below to
+                    start tracking!
+                  </p>
+                )}
                 <div className="grid grid-cols-4 gap-4 w-full mt-10">
                   {user?.tasks?.map((task) => (
                     <div
