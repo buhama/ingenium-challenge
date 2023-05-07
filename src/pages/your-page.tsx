@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { ReactElement, useState } from "react";
 import Layout from "../components/Layout";
 import { useUserStore } from "../store/UserStore";
@@ -15,11 +16,9 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { User, UserTask } from "../models/User";
-import { AddIcon, PlusSquareIcon } from "@chakra-ui/icons";
-import LoginBackSplash from "../components/LoginBackSplash";
 import Image from "next/image";
 import beaver1 from "@images/beaver1.svg";
-import { faShower } from "@fortawesome/free-solid-svg-icons";
+import borrisProfile from "@images/borrisProfile.svg";
 import Icon from "../components/assets/Icon";
 import { IconType } from "../models/Icon";
 import TaskIcons from "../components/assets/TaskIcons";
@@ -144,10 +143,34 @@ const YourPage = () => {
   return (
     <div>
       <Image
-        className="absolute bottom-40 left-40"
+        className="absolute bottom-40 xl:left-40 hidden xl:block"
         src={beaver1}
         alt="Borris The Beaver"
       />
+      <div className="w-full max-w-5xl absolute bottom-20 xl:left-60 px-10">
+        <div className="flex items-start">
+          <div className="rounded-full aspect-square border-2 border-black z-20">
+            <Image
+              src={borrisProfile}
+              alt="Borris The Beaver"
+              style={{ objectFit: "cover" }}
+              className="bg-slate-200 rounded-full w-40"
+            />
+          </div>
+          <div>
+            <div className="bg-slate-200 w-fit min-h-fit flex items-center z-30 rounded-lg border-2 border-black -mb-1 -ml-4 px-3">
+              <p className="font-bold text-lg">Borris</p>
+            </div>
+            <div className="bg-slate-200 w-full min-h-fit flex items-center z-10 pl-10 -ml-7 rounded-xl border-2 border-black py-2">
+              <p className="font-bold text-lg">
+                Now that you've learned about the impact of climate change on
+                animals, here's what you can do to help! Click on the things you
+                have done today.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="flex justify-end">
         <div className="w-full max-w-4xl rounded-xl bg-white mr-10 mt-20 p-4">
           <p className="font-bold text-lg">Hey {user?.name}</p>
@@ -223,36 +246,7 @@ const YourPage = () => {
           </Button>
         </div>
       </div>
-      <p> Hey {user?.name}</p>
-      <p> Your classroom {classroom?.name}</p>
-      <p> Your classroom id {classroom?.simple_id}</p>
-      <p className="font-bold">Your classes tasks</p>
-      {classroom?.tasks?.map((task) => (
-        <div key={task.id} className="flex items-center gap-x-2">
-          <p>{task.label}</p>
-          <Button
-            size="small"
-            onClick={() => {
-              setSelectedTaskId(task.id);
-              onOpen();
-            }}
-          >
-            Add To Your Tasks
-          </Button>
-        </div>
-      ))}
-      <p className="font-bold">Your own tasks</p>
-      {user?.tasks?.map((task) => (
-        <div key={task.taskId} className="flex items-center gap-x-2">
-          <p>{classroom?.tasks?.find((t) => t.id === task.taskId)?.label}</p>
-          <p>{task.amount}</p>
-          <p>{task.goal}</p>
-          <AddIcon
-            className="cursor-pointer"
-            onClick={() => increaseTask(task.taskId)}
-          />
-        </div>
-      ))}
+
       <Modal isOpen={isOpen} onClose={closeModal} isCentered>
         <ModalOverlay />
         <ModalContent>
