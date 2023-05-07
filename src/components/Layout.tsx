@@ -5,7 +5,7 @@ import { useAuthUserStore } from "../store/AuthUserStore";
 import { useGetUserData } from "../hooks/getUserData";
 import { useGetClassroomData } from "../hooks/getClassroomData";
 import { useUserStore } from "../store/UserStore";
-import LoginBackSplash from "./LoginBacksplash";
+import LoginBackSplash from "./LoginBackSplash";
 
 export interface Props {
   children: React.ReactNode;

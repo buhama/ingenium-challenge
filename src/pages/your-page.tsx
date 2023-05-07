@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { User, UserTask } from "../models/User";
 import { AddIcon, PlusSquareIcon } from "@chakra-ui/icons";
-import LoginBackSplash from "../components/LoginBacksplash";
+import LoginBackSplash from "../components/LoginBackSplash";
 import Image from "next/image";
 import beaver1 from "@images/beaver1.svg";
 import { faShower } from "@fortawesome/free-solid-svg-icons";

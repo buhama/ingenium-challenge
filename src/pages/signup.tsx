@@ -11,7 +11,7 @@ import { getTodaysDate } from "../helpers/date";
 import { useClassroomStore } from "../store/ClassroomStore";
 import { getRandomId } from "../helpers/string";
 import { findClassroom } from "../helpers/classroom";
-import LoginBackSplash from "../components/LoginBacksplash";
+import LoginBackSplash from "../components/LoginBackSplash";
 
 const SignUp = () => {
   const [name, setName] = useState("");
