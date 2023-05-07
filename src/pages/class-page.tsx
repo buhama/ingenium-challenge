@@ -143,7 +143,7 @@ const ClassPages = () => {
             <p>Class Id: {classroom?.simple_id}</p>
           </div>
           <div>
-            <p className="font-bold">Your Classroom Tasks: </p>
+            <p className="font-bold">Your Classroom Habits: </p>
             <div className="grid grid-cols-4 gap-4 w-full mt-10">
               {classroom?.tasks?.map((task) => (
                 <div
@@ -169,7 +169,7 @@ const ClassPages = () => {
               leftIcon={<Icon icon={IconType.PLUS} />}
               onClick={onOpen}
             >
-              Add Task For The Classroom
+              Add Habit For The Classroom
             </Button>
           </div>
         </div>
@@ -180,7 +180,7 @@ const ClassPages = () => {
           <ModalHeader>Add Habit</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <p>Task description</p>
+            <p>Habit description</p>
             <Input
               placeholder="Eat vegan meals"
               value={taskLabel}
@@ -212,7 +212,7 @@ const ClassPages = () => {
                     onClick={deleteTask}
                     leftIcon={<Icon icon={IconType.TRASH} />}
                   >
-                    Delete Task
+                    Delete Habit
                   </Button>
                 )}
                 <Button
