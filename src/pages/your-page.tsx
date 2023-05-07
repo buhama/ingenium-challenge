@@ -15,10 +15,14 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { User, UserTask } from "../models/User";
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, PlusSquareIcon } from "@chakra-ui/icons";
 import LoginBackSplash from "../components/LoginBacksplash";
 import Image from "next/image";
 import beaver1 from "@images/beaver1.svg";
+import { faShower } from "@fortawesome/free-solid-svg-icons";
+import Icon from "../components/assets/Icon";
+import { IconType } from "../models/Icon";
+import TaskIcons from "../components/assets/TaskIcons";
 
 const YourPage = () => {
   const { user, updateUser, setUser } = useUserStore();
@@ -134,6 +138,28 @@ const YourPage = () => {
         src={beaver1}
         alt="Borris The Beaver"
       />
+      <div className="flex justify-end">
+        <div className="w-full max-w-4xl rounded-xl bg-white mr-10 mt-20 p-4">
+          <p className="font-bold text-lg">Hey {user?.name}</p>
+          <div className="grid grid-cols-4 gap-4 w-full mt-10">
+            {user?.tasks?.map((task) => (
+              <div
+                className="flex w-full items-center justify-center"
+                key={task.taskId}
+              >
+                <TaskIcons
+                  icon={IconType.SHOWER}
+                  label={
+                    classroom?.tasks?.find((t) => t.id === task.taskId)
+                      ?.label || ""
+                  }
+                  bgColor={"bg-white"}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
       <p> Hey {user?.name}</p>
       <p> Your classroom {classroom?.name}</p>
       <p> Your classroom id {classroom?.simple_id}</p>
