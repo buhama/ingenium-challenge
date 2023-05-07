@@ -48,6 +48,7 @@ const SignUp = () => {
           name: classRoomName,
           created_at: getTodaysDate(),
           simple_id: class_id.slice(0, 5),
+          tasks: [],
         });
       }
 

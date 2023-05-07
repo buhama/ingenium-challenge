@@ -33,6 +33,7 @@ const YourPage = () => {
   const [goal, setGoal] = useState(0);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [increaseTaskLoading, setIncreaseTaskLoading] = useState(false);
 
   const toast = useToast();
 
@@ -104,6 +105,8 @@ const YourPage = () => {
 
   const increaseTask = async (taskId: string) => {
     try {
+      setSelectedTaskId(taskId);
+      setIncreaseTaskLoading(true);
       if (!user) {
         throw new Error("No user found");
       }
@@ -128,6 +131,9 @@ const YourPage = () => {
       setUser({ ...newUser });
     } catch (error) {
       console.log(error);
+    } finally {
+      setIncreaseTaskLoading(false);
+      setSelectedTaskId(null);
     }
   };
 
@@ -146,6 +152,9 @@ const YourPage = () => {
               <div
                 className="flex w-full items-center justify-center"
                 key={task.taskId}
+                onClick={() =>
+                  !increaseTaskLoading && increaseTask(task.taskId)
+                }
               >
                 <TaskIcons
                   icon={IconType.SHOWER}
@@ -154,6 +163,11 @@ const YourPage = () => {
                       ?.label || ""
                   }
                   bgColor={"bg-white"}
+                  goal={task.goal}
+                  progress={task.amount}
+                  loading={
+                    increaseTaskLoading && selectedTaskId === task.taskId
+                  }
                 />
               </div>
             ))}
