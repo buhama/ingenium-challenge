@@ -18,7 +18,9 @@ import { getRandomId } from "../helpers/string";
 import Layout from "../components/Layout";
 import TaskIcons from "../components/assets/TaskIcons";
 import { IconType, Icons } from "../models/Icon";
+import tree from "@images/tree.svg";
 import Icon from "../components/assets/Icon";
+import Image from "next/image";
 
 const ClassPages = () => {
   const { user } = useUserStore();
@@ -136,8 +138,21 @@ const ClassPages = () => {
 
   return (
     <div>
+      {classroom?.trees?.map((t) => (
+        <Image
+          key={t.id}
+          className={`absolute ${t.opacityClass}`}
+          style={{ bottom: t.bottomClass, right: t.rightClass, opacity: '0.5' }}
+          width={100}
+          src={tree}
+          alt="Tree"
+        />
+      ))}
       <div className="flex justify-end">
-        <div className="w-full max-w-4xl rounded-xl bg-white mr-10 mt-20 p-4 max-h-[700px] overflow-auto">
+        <div
+          className="w-full max-w-4xl rounded-xl bg-white mr-10 mt-20 p-4 overflow-auto z-50"
+          style={{ maxHeight: "60vh" }}
+        >
           <div className="flex items-center justify-between">
             <p className="font-bold text-lg">Hey {user?.name}</p>
             <p>Class Id: {classroom?.simple_id}</p>

@@ -25,10 +25,17 @@ import TaskIcons from "../components/assets/TaskIcons";
 import { AnimatePresence } from "framer-motion";
 import FadeInOut from "../components/assets/FadeInOut";
 import tree from "@images/tree.svg";
+import { Classroom, Tree } from "../models/Classroom";
+import { getRandomId } from "../helpers/string";
+import {
+  getTreeBottomClass,
+  getTreeOpacityStyle,
+  getTreeRightClass,
+} from "../helpers/tree";
 
 const YourPage = () => {
   const { user, updateUser, setUser } = useUserStore();
-  const { classroom } = useClassroomStore();
+  const { classroom, updateClassroom, setClassroom } = useClassroomStore();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -75,8 +82,28 @@ const YourPage = () => {
         tasks: newTasks,
       };
 
+      const currentTrees = classroom?.trees || [];
+      const newTree: Tree = {
+        id: getRandomId().slice(0, 5),
+        studentId: user.id,
+        taskId: selectedTaskId,
+        opacityClass: "opacity-10",
+        rightClass: getTreeRightClass(),
+        bottomClass: getTreeBottomClass(),
+      };
+
+      const newTrees = [...currentTrees, newTree];
+
       await updateUser(newUser);
+      await updateClassroom({
+        ...classroom,
+        trees: newTrees,
+      });
       setUser({ ...newUser });
+      setClassroom({
+        ...classroom,
+        trees: newTrees,
+      });
 
       toast({
         title: "Task added",
@@ -115,7 +142,12 @@ const YourPage = () => {
         throw new Error("No user found");
       }
 
+      if (!classroom) {
+        throw new Error("No classroom found");
+      }
+
       const currentTasks = user?.tasks || [];
+      const selectedTask = currentTasks.find((task) => task.taskId === taskId);
       const newTasks = currentTasks.map((task) => {
         if (task.taskId === taskId) {
           return {
@@ -130,9 +162,29 @@ const YourPage = () => {
         ...user,
         tasks: newTasks,
       };
+      const newTrees = classroom?.trees?.map((tree) => {
+        if (tree.taskId === taskId && tree.studentId === user.id) {
+          return {
+            ...tree,
+            opacityClass: selectedTask
+              ? getTreeOpacityStyle(selectedTask.goal, selectedTask.amount + 1)
+              : "1",
+          };
+        }
+        return tree;
+      });
+
+      console.log("newTrees", newTrees);
+
+      const newClassroom: Classroom = {
+        ...classroom,
+        trees: newTrees,
+      };
 
       await updateUser(newUser);
+      await updateClassroom(newClassroom);
       setUser({ ...newUser });
+      setClassroom({ ...newClassroom });
     } catch (error) {
       console.log(error);
     } finally {
@@ -143,12 +195,48 @@ const YourPage = () => {
 
   return (
     <div>
+      {classroom?.trees?.map((t) => (
+        <Image
+          key={t.id}
+          className={`absolute ${t.opacityClass}`}
+          style={{
+            bottom: t.bottomClass,
+            right: t.rightClass,
+            opacity: t.opacityClass,
+          }}
+          width={100}
+          src={tree}
+          alt="Tree"
+        />
+      ))}
+      {/* <Image
+        className="absolute"
+        style={{ bottom: "20%", right: "8%" }}
+        width={100}
+        src={tree}
+        alt="Tree"
+      />
       <Image
-        className="absolute bottom-52 xl:right-80"
+        className="absolute"
+        style={{ bottom: "35%", right: "8%" }}
+        width={150}
+        src={tree}
+        alt="Tree"
+      />
+      <Image
+        className="absolute"
+        style={{ bottom: "20%", right: "85%" }}
         width={200}
         src={tree}
         alt="Tree"
       />
+      <Image
+        className="absolute"
+        style={{ bottom: "35%", right: "85%" }}
+        width={250}
+        src={tree}
+        alt="Tree"
+      /> */}
       <Image
         className="absolute bottom-40 xl:left-40 hidden xl:block"
         src={beaver1}
@@ -180,7 +268,10 @@ const YourPage = () => {
         </div>
       </div>
       <div className="flex justify-end">
-        <div className="w-full max-w-4xl rounded-xl bg-white mr-10 mt-20 p-4 overflow-auto max-h-[700px]">
+        <div
+          className="w-full max-w-4xl rounded-xl bg-white mr-10 mt-20 p-4 overflow-auto z-50"
+          style={{ maxHeight: "60vh" }}
+        >
           <p className="font-bold text-lg">Hey {user?.name}</p>
           <AnimatePresence initial={false}>
             {tasksView === "user" && (
