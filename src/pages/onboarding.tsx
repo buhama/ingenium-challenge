@@ -123,7 +123,7 @@ const OnboardingPage = () => {
       </div>
       {(step === Step.CHOOSE_TOPIC || step === Step.WATCH_VIDEO) && (
         <div className="flex justify-end md:mr-20 mx-10">
-          <div className="w-full max-w-4xl rounded-xl md:mr-20 mt-20 p-4 mx-auto">
+          <div className="w-full max-w-3xl rounded-xl md:mr-20 mt-20 p-4 mx-auto">
             {step === Step.CHOOSE_TOPIC && (
               <div className="grid grid-cols-2 gap-y-10 gap-x-4">
                 <div
@@ -134,6 +134,7 @@ const OnboardingPage = () => {
                     src={tempVideoIcon}
                     alt="Video Icon"
                     className="rounded-xl cursor-pointer hover:scale-105 transition-all"
+                    width={200}
                   />
                   <p className="font-bold text-lg text-center mt-2">
                     Changing Temperatures
@@ -147,6 +148,7 @@ const OnboardingPage = () => {
                     src={seaLevelsVideoIcon}
                     alt="Video Icon"
                     className="rounded-xl cursor-pointer hover:scale-105 transition-all"
+                    width={200}
                   />
                   <p className="font-bold text-lg text-center mt-2">
                     Rising Sea Levels
@@ -160,6 +162,7 @@ const OnboardingPage = () => {
                     src={weatherChangesVideoIcon}
                     alt="Video Icon"
                     className="rounded-xl cursor-pointer hover:scale-105 transition-all"
+                    width={200}
                   />
                   <p className="font-bold text-lg text-center mt-2">
                     Weather Changes
@@ -173,6 +176,7 @@ const OnboardingPage = () => {
                     src={impactsOnAnimalsIcon}
                     alt="Video Icon"
                     className="rounded-xl cursor-pointer hover:scale-105 transition-all"
+                    width={200}
                   />
                   <p className="font-bold text-lg text-center mt-2">
                     Impacts on Animals
