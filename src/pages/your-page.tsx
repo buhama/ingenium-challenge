@@ -16,6 +16,9 @@ import {
 } from "@chakra-ui/react";
 import { User, UserTask } from "../models/User";
 import { AddIcon } from "@chakra-ui/icons";
+import LoginBackSplash from "../components/LoginBacksplash";
+import Image from "next/image";
+import beaver1 from "@images/beaver1.svg";
 
 const YourPage = () => {
   const { user, updateUser, setUser } = useUserStore();
@@ -126,6 +129,11 @@ const YourPage = () => {
 
   return (
     <div>
+      <Image
+        className="absolute bottom-40 left-40"
+        src={beaver1}
+        alt="Borris The Beaver"
+      />
       <p> Hey {user?.name}</p>
       <p> Your classroom {classroom?.name}</p>
       <p> Your classroom id {classroom?.simple_id}</p>

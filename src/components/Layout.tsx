@@ -5,6 +5,7 @@ import { useAuthUserStore } from "../store/AuthUserStore";
 import { useGetUserData } from "../hooks/getUserData";
 import { useGetClassroomData } from "../hooks/getClassroomData";
 import { useUserStore } from "../store/UserStore";
+import LoginBackSplash from "./LoginBacksplash";
 
 export interface Props {
   children: React.ReactNode;
@@ -51,19 +52,24 @@ const Layout: React.FC<Props> = ({ children, noNav }) => {
   };
 
   return (
-    <div className="relative">
-      <main className={"min-h-screen bg-hero-pattern"}>
-        <div className="flex justify-end mr-4 mt-4">
-          <Button
-            colorScheme="red"
-            size={"sm"}
-            onClick={logOut}
-            isLoading={logoutLoading}
-          >
-            Logout
-          </Button>
+    <div>
+      <main>
+        <LoginBackSplash />
+        <div className="min-h-screen">
+          <div>
+            <div className="flex justify-end mr-4 pt-4">
+              <Button
+                colorScheme="red"
+                size={"sm"}
+                onClick={logOut}
+                isLoading={logoutLoading}
+              >
+                Logout
+              </Button>
+            </div>
+          </div>
+          {children}
         </div>
-        {children}
       </main>
     </div>
   );
