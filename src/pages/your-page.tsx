@@ -24,6 +24,7 @@ import { IconType } from "../models/Icon";
 import TaskIcons from "../components/assets/TaskIcons";
 import { AnimatePresence } from "framer-motion";
 import FadeInOut from "../components/assets/FadeInOut";
+import tree from "@images/tree.svg";
 
 const YourPage = () => {
   const { user, updateUser, setUser } = useUserStore();
@@ -143,10 +144,17 @@ const YourPage = () => {
   return (
     <div>
       <Image
+        className="absolute bottom-52 xl:right-80"
+        width={200}
+        src={tree}
+        alt="Tree"
+      />
+      <Image
         className="absolute bottom-40 xl:left-40 hidden xl:block"
         src={beaver1}
         alt="Borris The Beaver"
       />
+
       <div className="w-full max-w-5xl absolute bottom-20 xl:left-60 px-10">
         <div className="flex items-start">
           <div className="rounded-full aspect-square border-2 border-black z-20">
