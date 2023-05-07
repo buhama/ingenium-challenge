@@ -26,6 +26,7 @@ const ClassPages = () => {
   const [taskLabel, setTaskLabel] = useState("");
   const [loading, setLoading] = useState(false);
   const [icon, setIcon] = useState<IconType>(IconType.LEAF);
+  const [selectedId, setSelectedId] = useState<string>("");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -40,13 +41,20 @@ const ClassPages = () => {
       const currentTasks = classroom?.tasks || [];
 
       const newTask: Task = {
-        id: getRandomId().slice(0, 8),
+        id: selectedId || getRandomId().slice(0, 8),
         label: taskLabel,
         class_id: classroom?.id,
         icon,
       };
 
-      const newTasks = [...currentTasks, newTask];
+      const newTasks = [...currentTasks];
+
+      if (selectedId) {
+        const index = newTasks.findIndex((task) => task.id === selectedId);
+        newTasks[index] = newTask;
+      } else {
+        newTasks.push(newTask);
+      }
 
       const newClassroom = {
         ...classroom,
@@ -78,9 +86,52 @@ const ClassPages = () => {
     }
   };
 
+  const deleteTask = async () => {
+    try {
+      setLoading(true);
+      if (!classroom) {
+        throw new Error("No classroom found");
+      }
+      const currentTasks = classroom?.tasks || [];
+
+      const newTasks = currentTasks.filter((task) => task.id !== selectedId);
+
+      const newClassroom = {
+        ...classroom,
+        tasks: newTasks,
+      };
+
+      await updateClassroom(newClassroom);
+      setClassroom({ ...newClassroom });
+      closeTaskModal();
+
+      toast({
+        title: "Task deleted",
+        description: "Task deleted successfully",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      console.log(error);
+
+      toast({
+        title: "Error",
+        description: (error as Error).message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const closeTaskModal = () => {
     onClose();
     setTaskLabel("");
+    setIcon(IconType.LEAF);
+    setSelectedId("");
   };
 
   return (
@@ -96,9 +147,12 @@ const ClassPages = () => {
             <div className="grid grid-cols-4 gap-4 w-full mt-10">
               {classroom?.tasks?.map((task) => (
                 <div
-                  className="flex w-full items-center justify-center"
+                  className="flex w-full items-start justify-center"
                   key={task.id}
                   onClick={() => {
+                    setSelectedId(task.id);
+                    setIcon(task.icon as IconType);
+                    setTaskLabel(task.label);
                     onOpen();
                   }}
                 >
@@ -120,7 +174,7 @@ const ClassPages = () => {
           </div>
         </div>
       </div>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal isOpen={isOpen} onClose={closeTaskModal} isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add Habit</ModalHeader>
@@ -149,11 +203,26 @@ const ClassPages = () => {
                 </div>
               ))}
             </div>
-            <div className="flex justify-between w-full mt-4">
-              <Button>Cancel</Button>
-              <Button colorScheme="green" onClick={addTask} isLoading={loading}>
-                Add
-              </Button>
+            <div className="flex justify-between w-full mt-12">
+              <Button onClick={closeTaskModal}>Cancel</Button>
+              <div className="flex gap-x-2">
+                {selectedId && (
+                  <Button
+                    colorScheme="red"
+                    onClick={deleteTask}
+                    leftIcon={<Icon icon={IconType.TRASH} />}
+                  >
+                    Delete Task
+                  </Button>
+                )}
+                <Button
+                  colorScheme="green"
+                  onClick={addTask}
+                  isLoading={loading}
+                >
+                  Add
+                </Button>
+              </div>
             </div>
           </ModalBody>
         </ModalContent>

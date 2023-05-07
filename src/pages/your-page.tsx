@@ -180,7 +180,7 @@ const YourPage = () => {
                 <div className="grid grid-cols-4 gap-4 w-full mt-10">
                   {user?.tasks?.map((task) => (
                     <div
-                      className="flex w-full items-center justify-center"
+                      className="flex w-full items-start justify-center"
                       key={task.taskId}
                       onClick={() =>
                         !increaseTaskLoading && increaseTask(task.taskId)
@@ -216,7 +216,7 @@ const YourPage = () => {
                   <div className="grid grid-cols-4 gap-4 w-full mt-10">
                     {classroom?.tasks?.map((task) => (
                       <div
-                        className="flex w-full items-center justify-center"
+                        className="flex w-full items-start justify-center"
                         key={task.id}
                         onClick={() => {
                           setSelectedTaskId(task.id);
