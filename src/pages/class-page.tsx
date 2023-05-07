@@ -137,13 +137,15 @@ const ClassPages = () => {
   return (
     <div>
       <div className="flex justify-end">
-        <div className="w-full max-w-4xl rounded-xl bg-white mr-10 mt-20 p-4">
+        <div className="w-full max-w-4xl rounded-xl bg-white mr-10 mt-20 p-4 max-h-[700px] overflow-auto">
           <div className="flex items-center justify-between">
             <p className="font-bold text-lg">Hey {user?.name}</p>
             <p>Class Id: {classroom?.simple_id}</p>
           </div>
           <div>
-            <p className="font-bold">Your Classroom Habits: </p>
+            <p className="font-bold text-center mt-5">
+              Your Classroom Habits:{" "}
+            </p>
             <div className="grid grid-cols-4 gap-4 w-full mt-10">
               {classroom?.tasks?.map((task) => (
                 <div

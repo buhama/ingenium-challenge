@@ -172,7 +172,7 @@ const YourPage = () => {
         </div>
       </div>
       <div className="flex justify-end">
-        <div className="w-full max-w-4xl rounded-xl bg-white mr-10 mt-20 p-4">
+        <div className="w-full max-w-4xl rounded-xl bg-white mr-10 mt-20 p-4 overflow-auto max-h-[700px]">
           <p className="font-bold text-lg">Hey {user?.name}</p>
           <AnimatePresence initial={false}>
             {tasksView === "user" && (
